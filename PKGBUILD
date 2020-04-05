@@ -16,6 +16,11 @@ install="$pkgname.install"
 source=("$pkgname::git+https://github.com/hildigerr/brother-mfcj425w")
 md5sums=('SKIP')
 
+pkgver() {
+  cd "$srcdir/$pkgname"
+  git describe --tags --long | awk -F- '{printf "%s.r%s", $1, $2}'
+}
+
 package() {
   cd "$srcdir/$pkgname"
   make DESTDIR="$pkgdir/" install
