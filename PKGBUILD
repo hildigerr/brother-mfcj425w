@@ -8,7 +8,7 @@ url="https://support.brother.com/g/b/producttop.aspx?c=us&lang=en&prod=mfcj425w_
 license=('GPL' 'custom:brother eula')
 conflicts=('brother-mfc-j425w')
 
-depends=('cups')
+depends=('cups' 'lib32-glibc' 'psutils')
 makedepends=('git')
 
 install="$pkgname.install"
