@@ -93,7 +93,7 @@ void write_log_file(int level,char *format,...);
 int main(int argc,char * argv[]) {
 
   char *printer;
-  char ppd_line[500],tmp[500],*p_tmp,tmp_n[10],tmp_op[500];
+  char ppd_line[500],tmp[512],*p_tmp,tmp_n[10],tmp_op[500];
   FILE *fp_ppd;
   char *p;
   char *commandline,*ppdfile, *printer_model;
