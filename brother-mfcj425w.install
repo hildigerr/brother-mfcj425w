@@ -1,0 +1,52 @@
+
+post_install() {
+    #LPR
+    /opt/brother/Printers/mfcj425w/inf/setupPrintcapij mfcj425w -i  
+    if [ -e /etc/init.d/lprng ]; then
+        /etc/init.d/lprng restart
+    elif [ -e /etc/init.d/lpd ]; then
+        /etc/init.d/lpd restart
+    fi
+    chmod 755 /opt/brother/Printers/mfcj425w/lpd
+    chmod 755 /opt/brother/Printers/mfcj425w/inf
+    chmod 755 /opt/brother/Printers/mfcj425w/
+    chmod 755 /opt/brother/Printers
+    chmod 755 /opt/brother
+    #CUPSwrapper
+    /opt/brother/Printers/mfcj425w/cupswrapper/cupswrappermfcj425w
+    chmod 755 /opt/brother/Printers/mfcj425w/cupswrapper
+    if [ "$(which semanage 2> /dev/null)" != '' ];then
+        semanage fcontext -a -t cupsd_rw_etc_t '/opt/brother/Printers/mfcj425w/inf(/.*)?'
+        semanage fcontext -a -t bin_t          '/opt/brother/Printers/mfcj425w/lpd(/.*)?'
+        semanage fcontext -a -t bin_t          '/opt/brother/Printers/mfcj425w/cupswrapper(/.*)?'
+        if [ "$(which restorecon 2> /dev/null)" != '' ];then
+            restorecon -R /opt/brother/Printers/mfcj425w
+        fi
+    fi
+}
+
+pre_remove() {
+    #LPR
+    /opt/brother/Printers/mfcj425w/inf/setupPrintcapij mfcj425w -e
+    #CUPSwrapper
+    /opt/brother/Printers/mfcj425w/cupswrapper/cupswrappermfcj425w -e
+}
+
+post_remove() {
+    #LPR
+    if [ -e /etc/init.d/lprng ]; then
+        /etc/init.d/lprng restart
+    elif [ -e /etc/init.d/lpd ]; then
+        /etc/init.d/lpd restart
+    fi
+    #CUPSwrapper
+    rm -f /tmp/mfcj425w_latest_print_info
+    if [ "$(which semanage 2> /dev/null)" != '' ];then
+        semanage fcontext -d -t cupsd_rw_etc_t '/opt/brother/Printers/mfcj425w/inf(/.*)?'
+        semanage fcontext -d -t bin_t          '/opt/brother/Printers/mfcj425w/lpd(/.*)?'
+        semanage fcontext -d -t bin_t          '/opt/brother/Printers/mfcj425w/cupswrapper(/.*)?'
+        if [ "$(which restorecon 2> /dev/null)" != '' ];then
+            restorecon -R /opt/brother/Printers/mfcj425w
+        fi
+    fi
+}
