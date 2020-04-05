@@ -19,4 +19,5 @@ md5sums=('SKIP')
 package() {
   cd "$srcdir/$pkgname"
   make DESTDIR="$pkgdir/" install
+  install -Dm644 brother.eula "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
